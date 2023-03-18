@@ -32,8 +32,13 @@ std::vector<PathPlannerTrajectory> RobotContainer::autoPath2 = PathPlanner::load
 std::vector<PathPlannerTrajectory> RobotContainer::autoPath3 = PathPlanner::loadPathGroup("auto3", {PathConstraints(3.0_mps, 3.0_mps_sq)});
 std::vector<PathPlannerTrajectory> RobotContainer::autoPath4 = PathPlanner::loadPathGroup("auto4", {PathConstraints(3.0_mps, 3.0_mps_sq)});
 std::vector<PathPlannerTrajectory> RobotContainer::autoPath5 = PathPlanner::loadPathGroup("auto5", {PathConstraints(2.0_mps, 2.0_mps_sq)});
-std::vector<PathPlannerTrajectory> RobotContainer::autoPath6 = PathPlanner::loadPathGroup("auto6", {PathConstraints(2.0_mps, 2.0_mps_sq)});
-
+//std::vector<PathPlannerTrajectory> RobotContainer::autoPath6 = PathPlanner::loadPathGroup("auto6", {PathConstraints(2.0_mps, 2.0_mps_sq)});
+std::vector<PathPlannerTrajectory> RobotContainer::autoPath7 = PathPlanner::loadPathGroup("3 Low", {PathConstraints(3.0_mps, 3.0_mps_sq)});
+std::vector<PathPlannerTrajectory> RobotContainer::autoPath8 = PathPlanner::loadPathGroup("Red 2high and Balance", {PathConstraints(3.0_mps, 3.0_mps_sq)});
+std::vector<PathPlannerTrajectory> RobotContainer::autoPath9 = PathPlanner::loadPathGroup("Red 2high and intake", {PathConstraints(3.0_mps, 3.0_mps_sq)});
+std::vector<PathPlannerTrajectory> RobotContainer::autoPath10 = PathPlanner::loadPathGroup("Red Hp 2high and intake", {PathConstraints(3.0_mps, 3.0_mps_sq)});
+std::vector<PathPlannerTrajectory> RobotContainer::autoPath11 = PathPlanner::loadPathGroup("Red Hp 2high Balance", {PathConstraints(3.0_mps, 3.0_mps_sq)});
+std::vector<PathPlannerTrajectory> RobotContainer::autoPath12 = PathPlanner::loadPathGroup("Red Center", {PathConstraints(3.0_mps, 3.0_mps_sq)});
 
 RobotContainer::RobotContainer(): 
   // Initialize all of your commands and subsystems here
@@ -53,7 +58,13 @@ RobotContainer::RobotContainer():
    autoNum3(autoBuilder.fullAuto(autoPath3)),
    autoNum4(autoBuilder.fullAuto(autoPath4)),
    autoNum5(autoBuilder.fullAuto(autoPath5)),
-   autoNum6(autoBuilder.fullAuto(autoPath6))
+   //autoNum6(autoBuilder.fullAuto(autoPath6)),
+   autoNum7(autoBuilder.fullAuto(autoPath7)),
+   autoNum8(autoBuilder.fullAuto(autoPath8)),
+   autoNum9(autoBuilder.fullAuto(autoPath9)),
+   autoNum10(autoBuilder.fullAuto(autoPath10)),
+   autoNum11(autoBuilder.fullAuto(autoPath11)),
+   autoNum12(autoBuilder.fullAuto(autoPath12))
 
 {
 
@@ -67,33 +78,43 @@ RobotContainer::RobotContainer():
     m_chooser.AddOption("HP Score", autoNum3.get());
     m_chooser.AddOption("HP Charge Station", autoNum4.get());
     m_chooser.AddOption("Center Start", autoNum5.get());
-    m_chooser.AddOption("Auto Path 6", autoNum6.get());
+    m_chooser.AddOption("HP 3 Low", autoNum7.get());
+    m_chooser.AddOption("Red 2high and Balance", autoNum8.get());
+    m_chooser.AddOption("Red 2high and intake", autoNum9.get());
+    m_chooser.AddOption("Red Hp 2high and intake", autoNum10.get());
+    m_chooser.AddOption("Red Hp 2high Balance", autoNum11.get());
+    m_chooser.AddOption("Red Center", autoNum12.get());
 
-   frc::SmartDashboard::PutData(&m_chooser);
-  // Configure the button bindings
-  ConfigureButtonBindings();
+    frc::SmartDashboard::PutData(&m_chooser);
+    // Configure the button bindings
+    ConfigureButtonBindings();
 
-  // Set up default drive command
-  // The left stick controls translation of the robot.
-  // Turning is controlled by the X axis of the right stick.
-  m_drive.SetDefaultCommand(frc2::RunCommand(
-      [this] {
-        m_drive.Drive(
-            -units::meters_per_second_t(m_driverController.GetLeftY()),
-            -units::meters_per_second_t(m_driverController.GetLeftX()),
-            -units::radians_per_second_t(m_driverController.GetRightX()), true);
-      },
-      {&m_drive}));
+    // Set up default drive command
+    // The left stick controls translation of the robot.
+    // Turning is controlled by the X axis of the right stick.
+    m_drive.SetDefaultCommand(frc2::RunCommand(
+        [this]
+        {
+          m_drive.Drive(
+              -units::meters_per_second_t(m_driverController.GetLeftY()),
+              -units::meters_per_second_t(m_driverController.GetLeftX()),
+              -units::radians_per_second_t(m_driverController.GetRightX()), true);
+        },
+        {&m_drive}));
 
-
-  m_intake.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-      if(abs(m_coDriverController.GetLeftY()) < .1) {
-        m_intake.checkControl(0);
-      } else {
-        m_intake.checkControl(m_coDriverController.GetLeftY());
-      }
-    },{&m_intake}));
+    m_intake.SetDefaultCommand(frc2::RunCommand(
+        [this]
+        {
+          if (abs(m_coDriverController.GetLeftY()) < .1)
+          {
+            m_intake.checkControl(0);
+          }
+          else
+          {
+            m_intake.checkControl(m_coDriverController.GetLeftY());
+          }
+        },
+        {&m_intake}));
 
 }
 
